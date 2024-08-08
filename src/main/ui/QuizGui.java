@@ -13,7 +13,7 @@ import java.awt.event.WindowEvent;
 // GUI framework code and comments taken from https://github.students.cs.ubc.ca/CPSC210/AlarmSystem.git
 // https://docs.oracle.com/javase/8/docs/api/java/awt/event/WindowListener.html#windowClosed-java.awt.event.WindowEvent-
 
-// Account manager GUI: provides the same functionality as account manager but in graphical form
+// Quiz GUI
 public class QuizGui extends JFrame {
 
     private static final int WIDTH = 450;
@@ -29,7 +29,7 @@ public class QuizGui extends JFrame {
     private boolean hasStarted = false;
     private JPanel currPanel;
 
-    //EFFECTS: constructs the account manager application
+    //EFFECTS: constructs the quiz
     public QuizGui() {
         quiz = new Quiz();
 
@@ -83,8 +83,8 @@ public class QuizGui extends JFrame {
         homeScreen.add(homePanel, BorderLayout.WEST);
     }
 
-    //MODIFIES: generalOptions
-    //EFFECTS: adds buttons to generalOptions
+    //MODIFIES: quizScreen
+    //EFFECTS: adds buttons to quizScreen
     private void addQuizPanel() {
         JPanel quizPanel = new JPanel();
         quizPanel.setLayout(new GridLayout(4,1));
@@ -101,8 +101,8 @@ public class QuizGui extends JFrame {
         quizScreen.add(quizPanel, BorderLayout.WEST);
     }
 
-    //MODIFIES: accOptions
-    //EFFECTS: adds buttons to accOptions
+    //MODIFIES: scoreScreen
+    //EFFECTS: adds buttons to scoreScreen
     private void addScorePanel() {
         JPanel scorePanel = new JPanel();
         scorePanel.setLayout(new GridLayout(2,1));
@@ -125,8 +125,8 @@ public class QuizGui extends JFrame {
         scoreScreen.setVisible(true);
     }
 
-    //MODIFIES: generalOptions, accOptions
-    //EFFECTS: toggles visibility of frames based on whether al is empty or not
+    //MODIFIES: quizScreen, scoreScreen
+    //EFFECTS: toggles visibility of frames based on whether quiz has started or not
     private void toggleHomeScreenExtension() {
         if (!hasStarted) {
             quizScreen.setVisible(false);
@@ -141,7 +141,7 @@ public class QuizGui extends JFrame {
      * Helper to create print options combo box
      * @return  the combo box
      */
-    //EFFECTS: creates and returns combo box for account selection options
+    //EFFECTS: creates and returns combo box for answer selection options
     private JComboBox<String> createPrintCombo() {
         printCombo = new JComboBox<String>();
         for (String a : quiz.getNoteNames()) {
@@ -176,7 +176,7 @@ public class QuizGui extends JFrame {
     }
 
     /**
-     * Represents action to be taken when user wants to create a new account.
+     * Represents action to be taken when user wants to start a new quiz.
      */
     private class StartQuizAction extends AbstractAction {
 
@@ -184,8 +184,8 @@ public class QuizGui extends JFrame {
             super("Start Quiz");
         }
 
-        //MODIFIES: account list (al)
-        //EFFECTS: creates an account and adds it to the account list
+        //MODIFIES: quiz
+        //EFFECTS: starts a new quiz
         @Override
         public void actionPerformed(ActionEvent evt) {
             if (!hasStarted) {
@@ -206,7 +206,7 @@ public class QuizGui extends JFrame {
     }
 
     /**
-     * Represents action to be taken when user wants to view all account details.
+     * Represents action to be taken when user wants to play the question sound
      */
     private class PlaySoundAction extends AbstractAction {
 
@@ -214,7 +214,7 @@ public class QuizGui extends JFrame {
             super("Play Note");
         }
 
-        //EFFECTS: displays all account details
+        //EFFECTS: plays the note sound
         @Override
         public void actionPerformed(ActionEvent evt) {
             quiz.play();
@@ -243,14 +243,14 @@ public class QuizGui extends JFrame {
         }
     }
 
-    //EFFECTS: determines if given amount is valid based on transaction type and account balance
+    //EFFECTS: determines if answer note is valid
     private boolean validNote(String input, int octave) {
         return (octave != 0 || input.equals("A") || input.equals("A#/Bb") || input.equals("B"))
                 && (octave != 8 || input.equals("C"));
     }
 
     /**
-     * Represents action to be taken when user wants to deposit to an account.
+     * Represents action to be taken when user wants to submit an answer
      */
     private class SubmitAnswerAction extends AbstractAction {
 
@@ -258,8 +258,8 @@ public class QuizGui extends JFrame {
             super("Submit Answer");
         }
 
-        //MODIFIES: account (a)
-        //EFFECTS: makes a deposit to an account (a)
+        //MODIFIES: quiz
+        //EFFECTS: submits answer to quiz and updates quiz accordingly
         @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
         @Override
         public void actionPerformed(ActionEvent evt) {
@@ -319,7 +319,7 @@ public class QuizGui extends JFrame {
         new QuizGui();
     }
 
-    //EFFECTS: sets app exit settings: prints log when app is closed
+    //EFFECTS: sets app exit settings
     public void setCloseSettings() {
         addWindowListener(new WindowAdapter() {
             @Override
